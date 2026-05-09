@@ -132,7 +132,8 @@ class AlignmentMetric(BaseMetric):
                 )
             else:
                 self.truths: list[str] = self._generate_truths(test_case.input)
-                self.claims: list[str] = self._generate_claims(test_case.actual_output)  # ty: ignore
+                assert test_case.actual_output is not None
+                self.claims: list[str] = self._generate_claims(test_case.actual_output)
                 self.verdicts: list[AlignmentVerdict] = self._generate_verdicts()
                 self.score = self._calculate_score()
                 self.reason = self._generate_reason()
@@ -146,7 +147,8 @@ class AlignmentMetric(BaseMetric):
                         f"Score: {self.score}\nReason: {self.reason}",
                     ],
                 )
-        return self.score  # ty: ignore
+        assert self.score is not None
+        return self.score
 
     async def _a_generate_reason(self) -> str | None:
         if not self.include_reason:
@@ -214,9 +216,10 @@ class AlignmentMetric(BaseMetric):
         check_llm_test_case_params(test_case, self._required_params, None, None, self, self.model, test_case.multimodal)
         self.evaluation_cost = 0 if self.using_native_model else None
         with metric_progress_indicator(self, async_mode=True, _show_indicator=_show_indicator, _in_component=_in_component):
+            assert test_case.actual_output is not None
             self.truths, self.claims = await asyncio.gather(
                 self._a_generate_truths(test_case.input),
-                self._a_generate_claims(test_case.actual_output),  # ty: ignore
+                self._a_generate_claims(test_case.actual_output),
             )
             self.verdicts = await self._a_generate_verdicts()
             self.score = self._calculate_score()
@@ -238,11 +241,12 @@ class AlignmentMetric(BaseMetric):
             self.success = False
         else:
             try:
-                self.success = self.score >= self.threshold  # ty: ignore
+                assert self.score is not None
+                self.success = self.score >= self.threshold
             except TypeError:
                 self.success = False
         return self.success
 
     @property
-    def __name__(self):
+    def __name__(self):  # type: ignore[override]
         return "Alignment"

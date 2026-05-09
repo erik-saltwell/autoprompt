@@ -97,7 +97,8 @@ class CoverageMetric(BaseMetric):
         if self.assessment_questions is None:
             self.assessment_questions = self._generate_assessment_questions(test_case.input)
         original_answers = self._generate_answers(test_case.input)
-        summary_answers = self._generate_answers(test_case.actual_output)  # ty: ignore
+        assert test_case.actual_output is not None
+        summary_answers = self._generate_answers(test_case.actual_output)
         if len(original_answers) != len(summary_answers):
             raise ValueError("Number of answers generated does not match number of questions.")
         return [
@@ -137,12 +138,13 @@ class CoverageMetric(BaseMetric):
                 self.verbose_logs = construct_verbose_logs(
                     self,
                     steps=[
-                        f"Assessment Questions:\n{prettify_list(self.assessment_questions)}",  # ty: ignore
+                        f"Assessment Questions:\n{prettify_list(self.assessment_questions)}",  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
                         f"Coverage Verdicts:\n{prettify_list(self.verdicts)}",
                         f"Score: {self.score}\nReason: {self.reason}",
                     ],
                 )
-        return self.score  # ty: ignore
+        assert self.score is not None
+        return self.score
 
     async def _a_generate_reason(self) -> str | None:
         if not self.include_reason:
@@ -183,9 +185,10 @@ class CoverageMetric(BaseMetric):
     async def _a_generate_verdicts(self, test_case: LLMTestCase) -> list[CoverageVerdict]:
         if self.assessment_questions is None:
             self.assessment_questions = await self._a_generate_assessment_questions(test_case.input)
+        assert test_case.actual_output is not None
         original_answers, summary_answers = await asyncio.gather(
             self._a_generate_answers(test_case.input),
-            self._a_generate_answers(test_case.actual_output),  # ty: ignore
+            self._a_generate_answers(test_case.actual_output),
         )
         if len(original_answers) != len(summary_answers):
             raise ValueError("Number of answers generated does not match number of questions.")
@@ -215,7 +218,7 @@ class CoverageMetric(BaseMetric):
             self.verbose_logs = construct_verbose_logs(
                 self,
                 steps=[
-                    f"Assessment Questions:\n{prettify_list(self.assessment_questions)}",  # ty: ignore
+                    f"Assessment Questions:\n{prettify_list(self.assessment_questions)}",  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
                     f"Coverage Verdicts:\n{prettify_list(self.verdicts)}",
                     f"Score: {self.score}\nReason: {self.reason}",
                 ],
@@ -227,11 +230,12 @@ class CoverageMetric(BaseMetric):
             self.success = False
         else:
             try:
-                self.success = self.score >= self.threshold  # ty: ignore
+                assert self.score is not None
+                self.success = self.score >= self.threshold
             except TypeError:
                 self.success = False
         return self.success
 
     @property
-    def __name__(self):
+    def __name__(self):  # type: ignore[override]
         return "Coverage"

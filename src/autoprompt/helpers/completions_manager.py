@@ -29,7 +29,7 @@ def get_completion(prompt_data: PromptData, model: ModelString, effort: ModelEff
                 {"role": "system", "content": prompt_data.system_prompt},
                 {"role": "user", "content": prompt_data.user_prompt},
             ],
-            reasoning_effort=effort,
+            reasoning_effort=effort,  # type: ignore[arg-type]
         ),
     )
     end = perf_counter()
