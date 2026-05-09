@@ -8,6 +8,7 @@ class KnownPathnames(StrEnum):
     LOGS_DIR = "logs"
     TRACE_FILE = "trace.json"
     LOG_FILE = "autoprompt.log"
+    SETTINGS_FILE = "settings.yaml"
 
 
 def ensure_directory(dir: Path) -> None:
@@ -29,3 +30,7 @@ def tracefile_path() -> Path:
 
 def logfile_path() -> Path:
     return logs_dir() / KnownPathnames.LOG_FILE
+
+
+def settingsfile_path() -> Path:
+    return working_dir() / KnownPathnames.SETTINGS_FILE

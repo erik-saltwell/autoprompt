@@ -10,6 +10,7 @@ requires-python = ">=3.11"
 dependencies = [
     "deepeval>=3.9.9",
     "jinja2>=3.1.0",
+    "litellm>=1.83.0",
     "pydantic>=2.13.3",
     "python-dotenv>=1.2.1",
     "rich>=14.2.0",
@@ -41,11 +42,15 @@ addopts = "-q -s"
 
 [tool.ruff]
 target-version = "py311"
-line-length = 120
+line-length = 200
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
 ignore = []
+
+[tool.ruff.lint.per-file-ignores]
+"src/autoprompt/metrics/alignment/template.py" = ["E501"]
+"src/autoprompt/metrics/coverage/template.py" = ["E501"]
 
 [tool.ruff.format]
 quote-style = "double"

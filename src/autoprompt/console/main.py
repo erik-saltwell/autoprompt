@@ -2,18 +2,16 @@ from __future__ import annotations
 
 from importlib.metadata import PackageNotFoundError, metadata
 from importlib.metadata import version as dist_version
-from pathlib import Path
-from typing import Annotated
 
 import typer
 from dotenv import load_dotenv
 from rich.console import Console
 
-from ..protocols import CompositeLogger, LoggingProtocol
+from ..commands.test_command import TestCommand
+from ..protocols import CommandProtocol, CompositeLogger, LoggingProtocol
 from ..utils import Tracer, common_paths, initialize_request, initialize_tracing
 from .file_logging_protocol import FileLogger
 from .rich_logging_protocol import RichConsoleLogger
-
 
 app = typer.Typer(
     name="autoprompt",
@@ -38,8 +36,9 @@ def create_logger() -> tuple[LoggingProtocol, Tracer]:
 @app.command("test")
 def test() -> None:
     """Simple smoke command."""
-    console = Console()
-    console.print("[green]Hello from test[/green]")
+    logger, tracer = create_logger()
+    command: CommandProtocol = TestCommand(logger=logger, tracer=tracer)
+    command.execute()
 
 
 def _version_callback(value: bool) -> None:

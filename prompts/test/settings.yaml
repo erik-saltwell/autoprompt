@@ -1,0 +1,7 @@
+paths:
+  prompt: bulletize.md
+  output: output.md
+  input: trepanning_short_note.md
+prompt_generation:
+  model: gpt-5.5
+  effort: medium

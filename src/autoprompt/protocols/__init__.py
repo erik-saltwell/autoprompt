@@ -1,14 +1,13 @@
-from .command_protocol import CommandProtocol
+from .command_protocol import CommandProtocol, CommandResult
 from .logging_protocol import (
     CompositeLogger,
     LoggingProtocol,
+    NullLogger,
     ProgressTask,
     StatusHandle,
     _NullProgress,
     _NullStatus,
-    NullLogger,
 )
-
 
 __all__ = [
     "LoggingProtocol",
@@ -19,4 +18,5 @@ __all__ = [
     "_NullProgress",
     "_NullStatus",
     "NullLogger",
+    "CommandResult",
 ]

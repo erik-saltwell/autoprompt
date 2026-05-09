@@ -10,6 +10,7 @@
             "request": "launch",
             "module": "autoprompt",
             "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/prompts/test",
             "args": "test"
         },
         {
@@ -18,6 +19,7 @@
             "request": "launch",
             "module": "autoprompt",
             "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/prompts/test",
             "args": "${command:pickArgs}"
         },
         {
